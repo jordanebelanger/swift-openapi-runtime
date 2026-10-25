@@ -326,7 +326,8 @@ extension URIParser {
     /// - Parameter escapedValue: An escaped string.
     /// - Returns: The provided string with escaping removed.
     private func unescapeValue(_ escapedValue: Raw) -> Raw {
-        Self.unescapeValue(escapedValue, spaceUnescapingCharacters: configuration.spaceUnescapingCharacters)
+        guard configuration.percentEncoding else { return escapedValue }
+        return Self.unescapeValue(escapedValue, spaceUnescapingCharacters: configuration.spaceUnescapingCharacters)
     }
 
     /// Removes escaping from the provided string.

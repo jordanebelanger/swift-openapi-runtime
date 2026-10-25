@@ -23,7 +23,8 @@ extension URICoderConfiguration {
         explode: true,
         spaceEscapingCharacter: .percentEncoded,
         spaceUnescapingCharacters: .onlyPercentEncoded,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let formUnexplode: Self = .init(
@@ -31,7 +32,8 @@ extension URICoderConfiguration {
         explode: false,
         spaceEscapingCharacter: .percentEncoded,
         spaceUnescapingCharacters: .onlyPercentEncoded,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let simpleExplode: Self = .init(
@@ -39,7 +41,8 @@ extension URICoderConfiguration {
         explode: true,
         spaceEscapingCharacter: .percentEncoded,
         spaceUnescapingCharacters: .onlyPercentEncoded,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let simpleUnexplode: Self = .init(
@@ -47,7 +50,8 @@ extension URICoderConfiguration {
         explode: false,
         spaceEscapingCharacter: .percentEncoded,
         spaceUnescapingCharacters: .onlyPercentEncoded,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let formDataExplode: Self = .init(
@@ -55,7 +59,8 @@ extension URICoderConfiguration {
         explode: true,
         spaceEscapingCharacter: .plus,
         spaceUnescapingCharacters: .percentEncodedAndPlus,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let formDataUnexplode: Self = .init(
@@ -63,7 +68,8 @@ extension URICoderConfiguration {
         explode: false,
         spaceEscapingCharacter: .plus,
         spaceUnescapingCharacters: .percentEncodedAndPlus,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 
     static let deepObjectExplode: Self = .init(
@@ -71,7 +77,8 @@ extension URICoderConfiguration {
         explode: true,
         spaceEscapingCharacter: .percentEncoded,
         spaceUnescapingCharacters: .onlyPercentEncoded,
-        dateTranscoder: defaultDateTranscoder
+        dateTranscoder: defaultDateTranscoder,
+        percentEncoding: true
     )
 }
 

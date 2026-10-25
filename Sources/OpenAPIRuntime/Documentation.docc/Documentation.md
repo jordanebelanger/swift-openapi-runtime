@@ -61,6 +61,7 @@ You can also publish your transport or middleware as a Swift package to allow ot
 - ``Configuration``
 - ``DateTranscoder``
 - ``ISO8601DateTranscoder``
+- ``HeaderFieldEncoding``
 - ``MultipartBoundaryGenerator``
 - ``RandomMultipartBoundaryGenerator``
 - ``ConstantMultipartBoundaryGenerator``

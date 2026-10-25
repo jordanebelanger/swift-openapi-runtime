@@ -101,23 +101,32 @@ extension Converter {
     {
         let spaceEscapingCharacter: URICoderConfiguration.SpaceEscapingCharacter
         let spaceUnescapingCharacters: URICoderConfiguration.SpaceUnescapingCharacters
+        let percentEncoding: Bool
         switch location {
-        case .path, .headerField:
+        case .path:
             spaceEscapingCharacter = .percentEncoded
             spaceUnescapingCharacters = .onlyPercentEncoded
+            percentEncoding = true
+        case .headerField:
+            spaceEscapingCharacter = .percentEncoded
+            spaceUnescapingCharacters = .onlyPercentEncoded
+            percentEncoding = configuration.headerFieldEncoding == .percentEncoded
         case .query:
             spaceEscapingCharacter = .percentEncoded
             spaceUnescapingCharacters = .percentEncodedAndPlus
+            percentEncoding = true
         case .formBody:
             spaceEscapingCharacter = .plus
             spaceUnescapingCharacters = .percentEncodedAndPlus
+            percentEncoding = true
         }
         return .init(
             style: .init(style),
             explode: explode,
             spaceEscapingCharacter: spaceEscapingCharacter,
             spaceUnescapingCharacters: spaceUnescapingCharacters,
-            dateTranscoder: configuration.dateTranscoder
+            dateTranscoder: configuration.dateTranscoder,
+            percentEncoding: percentEncoding
         )
     }
 

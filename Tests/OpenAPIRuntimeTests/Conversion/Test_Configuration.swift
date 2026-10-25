@@ -80,4 +80,45 @@ final class Test_Configuration: Test_Runtime {
             expected: testPetWithPathPrettifiedWithoutEscapingSlashes
         )
     }
+
+    func _testHeaderField(configuration: Configuration, value: String, expected: String) throws {
+        let converter = Converter(configuration: configuration)
+        var headerFields: HTTPFields = [:]
+        try converter.setHeaderFieldAsURI(in: &headerFields, name: "foo", value: value)
+        XCTAssertEqual(headerFields, [.foo: expected])
+        let decodedValue = try converter.getRequiredHeaderFieldAsURI(in: headerFields, name: "foo", as: String.self)
+        XCTAssertEqual(decodedValue, value)
+    }
+
+    func testHeaderFieldEncoding_default() throws {
+        try _testHeaderField(
+            configuration: Configuration(),
+            value: "session=a%20b; Path=/",
+            expected: "session%3Da%2520b%3B%20Path%3D%2F"
+        )
+    }
+
+    func testHeaderFieldEncoding_unencoded() throws {
+        try _testHeaderField(
+            configuration: Configuration(headerFieldEncoding: .unencoded),
+            value: "session=a%20b; Path=/",
+            expected: "session=a%20b; Path=/"
+        )
+    }
+
+    func testHeaderFieldEncoding_unencodedDoesNotAffectPathAndQuery() throws {
+        let converter = Converter(configuration: Configuration(headerFieldEncoding: .unencoded))
+        XCTAssertEqual(try converter.renderedPath(template: "/items/{}", parameters: ["a/b c"]), "/items/a%2Fb%20c")
+        var request = HTTPRequest(soar_path: "/items", method: .get)
+        try converter.setQueryItemAsURI(in: &request, style: nil, explode: nil, name: "q", value: "a=b c")
+        XCTAssertEqual(request.path, "/items?q=a%3Db%20c")
+        let value: String = try converter.getRequiredQueryItemAsURI(
+            in: "q=a%3Db%20c",
+            style: nil,
+            explode: nil,
+            name: "q",
+            as: String.self
+        )
+        XCTAssertEqual(value, "a=b c")
+    }
 }

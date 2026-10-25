@@ -101,7 +101,8 @@ final class Test_URIValueFromNodeDecoder: Test_Runtime {
                     explode: explode,
                     spaceEscapingCharacter: .percentEncoded,
                     spaceUnescapingCharacters: .onlyPercentEncoded,
-                    dateTranscoder: .iso8601
+                    dateTranscoder: .iso8601,
+                    percentEncoding: true
                 )
             )
             let decodedValue = try decoder.decodeRoot(T.self)

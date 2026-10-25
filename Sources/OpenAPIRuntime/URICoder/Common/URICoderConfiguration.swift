@@ -76,4 +76,8 @@ struct URICoderConfiguration {
 
     /// The coder used for serializing the Date type.
     var dateTranscoder: any DateTranscoder
+
+    /// A Boolean value indicating whether keys and values are percent-encoded
+    /// when encoding, and percent-decoded when decoding.
+    var percentEncoding: Bool
 }

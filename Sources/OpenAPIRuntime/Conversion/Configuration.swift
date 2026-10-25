@@ -170,11 +170,46 @@ public struct JSONEncodingOptions: OptionSet, Sendable {
     public static let withoutEscapingSlashes: JSONEncodingOptions = .init(rawValue: 1 << 2)
 }
 
+/// The encoding applied to header field values serialized using a schema.
+///
+/// OpenAPI 3.0.4, 3.1.1, and later note that RFC 6570 percent-encoding is not always
+/// appropriate for header fields.
+///
+/// [OpenAPI 3.1.1 - Serializing headers and cookies.](https://spec.openapis.org/oas/v3.1.1.html#appendix-d-serializing-headers-and-cookies)
+public struct HeaderFieldEncoding: Sendable, Hashable {
+
+    /// The kind of the header field encoding.
+    enum Kind: Sendable, Hashable {
+
+        /// Percent-encoded, as described by RFC 6570.
+        case percentEncoded
+
+        /// Written and read verbatim.
+        case unencoded
+    }
+
+    /// The kind of the header field encoding.
+    let kind: Kind
+
+    /// Percent-encode values when serializing and percent-decode them when parsing,
+    /// as described by RFC 6570.
+    public static let percentEncoded: HeaderFieldEncoding = .init(kind: .percentEncoded)
+
+    /// Write and read values verbatim, without percent-encoding.
+    ///
+    /// Important: Array and object values are still joined with commas, so a comma inside
+    /// an element cannot be told apart from a separator.
+    public static let unencoded: HeaderFieldEncoding = .init(kind: .unencoded)
+}
+
 /// A set of configuration values used by the generated client and server types.
 public struct Configuration: Sendable {
 
     /// The transcoder used when converting between date and string values.
     public var dateTranscoder: any DateTranscoder
+
+    /// The encoding applied to header field values serialized using a schema.
+    public var headerFieldEncoding: HeaderFieldEncoding
 
     /// The options for the underlying JSON encoder.
     public var jsonEncodingOptions: JSONEncodingOptions
@@ -190,16 +225,19 @@ public struct Configuration: Sendable {
     /// - Parameters:
     ///   - dateTranscoder: The transcoder to use when converting between date
     ///   and string values.
+    ///   - headerFieldEncoding: The encoding applied to header field values serialized using a schema.
     ///   - jsonEncodingOptions: The options for the underlying JSON encoder.
     ///   - multipartBoundaryGenerator: The generator to use when creating mutlipart bodies.
     ///   - xmlCoder: Custom XML coder for encoding and decoding xml bodies. Only required when using XML body payloads.
     public init(
         dateTranscoder: any DateTranscoder = .iso8601,
+        headerFieldEncoding: HeaderFieldEncoding = .percentEncoded,
         jsonEncodingOptions: JSONEncodingOptions = [.sortedKeys, .prettyPrinted],
         multipartBoundaryGenerator: any MultipartBoundaryGenerator = .random,
         xmlCoder: (any CustomCoder)? = nil
     ) {
         self.dateTranscoder = dateTranscoder
+        self.headerFieldEncoding = headerFieldEncoding
         self.jsonEncodingOptions = jsonEncodingOptions
         self.multipartBoundaryGenerator = multipartBoundaryGenerator
         self.xmlCoder = xmlCoder
